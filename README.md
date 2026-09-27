@@ -4,117 +4,103 @@
 [![Website release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=website-v*&label=website)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true)
 [![JitPack](https://jitpack.io/v/mdakashhossain1/flip-book-plagin.svg)](https://jitpack.io/#mdakashhossain1/flip-book-plagin)
 
-A PDF flipbook viewer for Android apps and websites, with page-turn animation, zoom, a swipeable thumbnail strip, a page-number badge, and sound.
+A PDF flipbook viewer with page-turn animation, zoom, a swipeable thumbnail strip, a page-number badge and sound, for **Android** apps and **websites**.
 
-- **Android**: a native Kotlin library, installed from JitPack. Works with Android Views and Jetpack Compose.
-- **Website**: a static HTML/JS/CSS viewer. Load it from the jsDelivr CDN, or self-host the ZIP.
+Every code block below is complete and copy-ready. Version numbers in it are always the newest release: they're updated automatically whenever a new version ships.
 
-## Contents
+- [Android](#android): 3 steps
+- [Website](#website): 2 steps
+- [Reference](#reference): every option and API, only if you need more
 
-- [Choose your version](#choose-your-version)
-- [Releases](#releases)
-- [Android](#android)
-  - [1. Add the JitPack repository](#1-add-the-jitpack-repository)
-  - [2. Add the dependency](#2-add-the-dependency)
-  - [3a. Show a PDF with Android Views](#3a-show-a-pdf-with-android-views)
-  - [3b. Show a PDF with Jetpack Compose](#3b-show-a-pdf-with-jetpack-compose)
-  - [3c. Java](#3c-java)
-- [Website](#website)
-  - [Option A: Load from the CDN (auto-updates)](#option-a-load-from-the-cdn-auto-updates)
-  - [Option B: Self-host the ZIP](#option-b-self-host-the-zip)
-  - [Embed in another page](#embed-in-another-page)
-- [Advanced](#advanced)
-  - [Automatic updates](#automatic-updates)
-  - [Design options](#design-options)
-  - [Android API](#android-api)
-  - [Website API](#website-api)
-  - [Opening the website viewer from disk (file://)](#opening-the-website-viewer-from-disk-file)
-  - [Network, CORS and permissions](#network-cors-and-permissions)
-  - [Troubleshooting](#troubleshooting)
-  - [How releases work](#how-releases-work)
-- [Build from source](#build-from-source)
-
-## Choose your version
-
-| Branch | Contents | Use in your project |
-| --- | --- | --- |
-| [`android`](https://github.com/mdakashhossain1/flip-book-plagin/tree/android) | Native Kotlin library and sample app | Add the Maven dependency through JitPack |
-| [`website`](https://github.com/mdakashhossain1/flip-book-plagin/tree/website) | Static HTML, JavaScript, CSS, and assets | Load it from jsDelivr, or download the ZIP release and host it |
-| `main` | This guide | Start here and choose a platform |
-
-## Releases
-
-| Platform | Release notes | Install |
-| --- | --- | --- |
-| Android | [![Android release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=android-v*&label=android)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=android-v&expanded=true) | [Gradle + JitPack](#android) |
-| Website | [![Website release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=website-v*&label=website)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true) | [CDN](#option-a-load-from-the-cdn-auto-updates) or the ZIP attached to each [website release](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true) |
-
-The badges always show the newest release. Releases use platform-specific tags, `android-vX.Y.Z` and `website-vX.Y.Z`, and are created automatically; see [How releases work](#how-releases-work). To be notified of new versions, click **Watch → Custom → Releases** on the GitHub repository.
+---
 
 ## Android
 
-Requirements: `minSdk 24` (Android 7.0) or higher. The library has no third-party dependencies.
+Needs `minSdk 24` or higher.
 
-### 1. Add the JitPack repository
+### Step 1: Add JitPack
 
-In `settings.gradle.kts`, add JitPack inside `dependencyResolutionManagement.repositories`:
+In `settings.gradle.kts`, inside `dependencyResolutionManagement { repositories { … } }`:
 
 ```kotlin
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://jitpack.io")
-            content {
-                includeGroup("com.github.mdakashhossain1")
-            }
-        }
-    }
+maven {
+    url = uri("https://jitpack.io")
+    content { includeGroup("com.github.mdakashhossain1") }
 }
 ```
 
-The `content { includeGroup(...) }` filter makes Gradle look up only this library on JitPack, which keeps builds fast.
-
-<details>
-<summary>Groovy (<code>settings.gradle</code>)</summary>
-
-```groovy
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url 'https://jitpack.io'
-            content { includeGroup 'com.github.mdakashhossain1' }
-        }
-    }
-}
-```
-
-</details>
-
-### 2. Add the dependency
+### Step 2: Add the library
 
 In `app/build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.github.mdakashhossain1:flip-book-plagin:android-vX.Y.Z")
+    implementation("com.github.mdakashhossain1:flip-book-plagin:android-v0.2.1")
 }
 ```
 
-Replace `android-vX.Y.Z` with the tag shown in the Android badge at the top. To always get the newest release without editing this line, use `latest.release` instead. See [Automatic updates](#automatic-updates) for what each option does.
+Sync Gradle. This version is the newest release, and the line is updated automatically with every release.
+
+### Step 3: Show a PDF
+
+Put your PDF at `app/src/main/assets/books/sample.pdf`, then use **one** of these.
+
+#### Jetpack Compose
+
+Copy this whole file as `ReaderActivity.kt`:
 
 ```kotlin
-implementation("com.github.mdakashhossain1:flip-book-plagin:latest.release")
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
+import com.scoreplus.flipbook.FlipbookDesign
+import com.scoreplus.flipbook.FlipbookView
+
+class ReaderActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            Flipbook(
+                source = "books/sample.pdf",
+                modifier = Modifier.fillMaxSize().safeDrawingPadding(),
+            ) {
+                showThumbnails = 1      // thumbnail strip: 1 show, 0 hide
+                showPageNumber = 1      // page badge "4-5 / 24": 1 show, 0 hide
+                showSlider = 3          // bottom slider: 0 hide, 1 preview, 2 number, 3 both
+                showDouble = 0          // 0 auto, 1 always two pages, 2 always one page
+                controlsSize = "lg"     // toolbar size: "sm", "md", "lg"
+                arrows = 1              // 0 tap areas, 1 corner arrows, 2 side bars, 3 none
+                soundFlip = 1           // page-turn sound: 1 on, 0 off
+                loadPage = -1           // null first page, -1 last page read, or a page number
+            }
+        }
+    }
+}
+
+@Composable
+fun Flipbook(source: String, modifier: Modifier = Modifier, design: FlipbookDesign.() -> Unit = {}) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context -> FlipbookView(context) },
+        update = { view ->
+            if (view.tag != source) {
+                view.tag = source
+                view.open(source, FlipbookDesign().apply(design))
+            }
+        },
+        onRelease = { it.release() },
+    )
+}
 ```
 
-Sync Gradle. The version is the Android Git tag. Use `android-v0.2.1` or later; the older `android-v0.2.0` release was an AAR download only. [JitPack build page](https://jitpack.io/#mdakashhossain1/flip-book-plagin).
+#### Android Views (no Compose)
 
-### 3a. Show a PDF with Android Views
-
-Put a PDF at `app/src/main/assets/books/sample.pdf`, then:
+Copy this whole file as `ReaderActivity.kt`:
 
 ```kotlin
 import android.app.Activity
@@ -131,9 +117,14 @@ class ReaderActivity : Activity() {
         setContentView(flipbook)
 
         flipbook.open("books/sample.pdf", FlipbookDesign().apply {
-            showThumbnails = 1
-            showPageNumber = 1
-            controlsSize = "lg"
+            showThumbnails = 1      // thumbnail strip: 1 show, 0 hide
+            showPageNumber = 1      // page badge "4-5 / 24": 1 show, 0 hide
+            showSlider = 3          // bottom slider: 0 hide, 1 preview, 2 number, 3 both
+            showDouble = 0          // 0 auto, 1 always two pages, 2 always one page
+            controlsSize = "lg"     // toolbar size: "sm", "md", "lg"
+            arrows = 1              // 0 tap areas, 1 corner arrows, 2 side bars, 3 none
+            soundFlip = 1           // page-turn sound: 1 on, 0 off
+            loadPage = -1           // null first page, -1 last page read, or a page number
         })
     }
 
@@ -144,117 +135,25 @@ class ReaderActivity : Activity() {
 }
 ```
 
-Declare the activity in your manifest. For a remote PDF, pass an HTTPS URL instead: `flipbook.open("https://your-domain.com/books/sample.pdf")`. The spinner shows while it downloads, and the file is cached for next time.
+#### Register the activity
 
-To keep the book on the same page when the screen rotates, add this to the activity in the manifest. The view re-lays itself out for the new size.
+Add your app's `package` line at the top of the file, then declare the activity in `AndroidManifest.xml`. The `configChanges` line keeps the reader on the same page when the phone rotates:
 
 ```xml
-android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
+<activity
+    android:name=".ReaderActivity"
+    android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden" />
 ```
 
-### 3b. Show a PDF with Jetpack Compose
+**Remote PDF:** use an HTTPS link as the source, e.g. `"https://your-domain.com/books/sample.pdf"`. A spinner shows while it downloads, and the file is cached for next time.
 
-The library is a regular Android `View`, so Compose shows it through `AndroidView`. Copy this `Flipbook` composable into your project once and use it anywhere:
-
-```kotlin
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidView
-import com.scoreplus.flipbook.FlipbookDesign
-import com.scoreplus.flipbook.FlipbookListener
-import com.scoreplus.flipbook.FlipbookView
-
-@Composable
-fun Flipbook(
-    source: String,
-    modifier: Modifier = Modifier,
-    design: FlipbookDesign.() -> Unit = {},
-    onLoaded: (pageCount: Int) -> Unit = {},
-    onPageChanged: (page: Int, visiblePages: IntArray) -> Unit = { _, _ -> },
-    onError: (Throwable) -> Unit = {},
-    onViewReady: (FlipbookView) -> Unit = {},
-) {
-    val latestOnLoaded by rememberUpdatedState(onLoaded)
-    val latestOnPageChanged by rememberUpdatedState(onPageChanged)
-    val latestOnError by rememberUpdatedState(onError)
-
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            FlipbookView(context).apply {
-                listener = object : FlipbookListener {
-                    override fun onLoaded(numPages: Int) = latestOnLoaded(numPages)
-                    override fun onTurned(page: Int, visiblePages: IntArray) = latestOnPageChanged(page, visiblePages)
-                    override fun onError(error: Throwable) = latestOnError(error)
-                }
-                onViewReady(this)
-            }
-        },
-        update = { view ->
-            if (view.tag != source) {
-                view.tag = source
-                view.open(source, FlipbookDesign().apply(design))
-            }
-        },
-        onRelease = { it.release() },
-    )
-}
-```
-
-Use it in a screen:
-
-```kotlin
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-
-@Composable
-fun ReaderScreen() {
-    Flipbook(
-        source = "books/sample.pdf",
-        modifier = Modifier.fillMaxSize().safeDrawingPadding(),
-        design = {
-            showThumbnails = 1
-            showPageNumber = 1
-            controlsSize = "lg"
-        },
-    )
-}
-```
-
-Call it from your activity with `setContent { MaterialTheme { ReaderScreen() } }`.
-
-How the wrapper behaves:
-
-- The PDF opens once. Changing `source` opens the new PDF; other recompositions leave the book where it is.
-- `design` is read when a PDF opens. To apply new options, change `source`, or call `view.open(...)` yourself through `onViewReady`.
-- The viewer's memory is freed in `onRelease` when the composable leaves the screen.
-- `source` accepts anything `FlipbookView.open(path)` does: an asset path, or an `http(s)://` URL. For files and content URIs, call `view.open(FlipbookSource.LocalFile(file))` or `view.open(FlipbookSource.ContentUri(uri))` from `onViewReady`.
-
-This code was tested with Compose BOM `2025.10.00`, `activity-compose 1.11.0`, AGP 9.3.2 and the Compose compiler plugin `2.2.10`, pulling the library from JitPack with `latest.release`. Your project needs Compose set up already (`buildFeatures { compose = true }` and the `org.jetbrains.kotlin.plugin.compose` plugin).
-
-### 3c. Java
-
-```java
-FlipbookView flipbook = new FlipbookView(this);
-setContentView(flipbook);
-
-FlipbookDesign design = new FlipbookDesign();
-design.setShowThumbnails(1);
-design.setControlsSize("lg");
-flipbook.open("books/sample.pdf", design);
-```
+---
 
 ## Website
 
-The viewer is a static page, with no build step and no npm. It needs the markup in its `index.html`, one stylesheet, and two scripts.
+### Step 1: Copy this page
 
-### Option A: Load from the CDN (auto-updates)
-
-jsDelivr serves the `website` branch straight from GitHub, so you don't host any viewer files. Only your PDF lives on your server. Save this as a page on your site (for example `public/flipbook.html`) and change the PDF path at the bottom:
+Save it as `flipbook.html` on your website. It loads the viewer from the jsDelivr CDN, so there's nothing else to download or host.
 
 ```html
 <!doctype html>
@@ -263,13 +162,11 @@ jsDelivr serves the `website` branch straight from GitHub, so you don't host any
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>PDF flipbook</title>
-
-    <!-- @website follows the newest commit; use @website-vX.Y.Z to pin a release -->
     <script>
-      window.CDN_PATH = "https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website/assets";
+      window.CDN_PATH = "https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website-v0.2.0/assets";
     </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website/assets/css/flipbook.min.css" />
-    <script src="https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website/assets/pdfjs/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website-v0.2.0/assets/css/flipbook.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website-v0.2.0/assets/pdfjs/pdf.min.js"></script>
   </head>
   <body>
     <div id="loaderLine" class="loader-line" style="display: none"></div>
@@ -320,62 +217,42 @@ jsDelivr serves the `website` branch straight from GitHub, so you don't host any
       <div ignore="1" class="page-depth-label" style="display: none"></div>
     </script>
 
-    <script src="https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website/assets/js/flipbook.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website-v0.2.0/assets/js/flipbook.min.js"></script>
     <script>
       $(() => openFlipbook("/books/sample.pdf", {
-        show_thumbnails: 1,
-        show_page_number: 1,
-        controls_size: "lg"
+        show_thumbnails: 1,     // thumbnail strip: 1 show, 0 hide
+        show_page_number: 1,    // page badge "4-5 / 24": 1 show, 0 hide
+        show_slider: 3,         // bottom slider: 0 hide, 1 preview, 2 number, 3 both
+        show_double: 0,         // 0 auto, 1 always two pages, 2 always one page
+        controls_size: "lg",    // toolbar size: "sm", "md", "lg"
+        arrows: 1,              // 0 tap areas, 1 corner arrows, 2 side bars, 3 none
+        sound_flip: 1,          // page-turn sound: 1 on, 0 off
+        load_page: -1           // null first page, -1 last page read, or a page number
       }));
     </script>
   </body>
 </html>
 ```
 
-Rules for this setup:
+### Step 2: Point it at your PDF
 
-- `window.CDN_PATH` must be set **before** `flipbook.min.js` loads. The viewer loads its images, sounds and PDF worker from that address.
-- Use the same `@…` version in all four URLs.
-- Serve the page over HTTP or HTTPS. A page opened with a double-click can't read your PDF (see [file://](#opening-the-website-viewer-from-disk-file)).
-- The PDF path is resolved from the page URL. A PDF on another domain needs CORS (see [Network, CORS and permissions](#network-cors-and-permissions)).
+Change `"/books/sample.pdf"` to your PDF's path or URL, and open the page through your web server (not by double-clicking the file). A PDF on another domain must allow CORS.
 
-This exact page was tested served from a local web server: all viewer files loaded from jsDelivr, the pdf.js worker started, and thumbnails, the page badge and page turns all worked.
-
-### Option B: Self-host the ZIP
-
-1. Open the newest [website release](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true), download `scoreplus-flipbook-website-X.Y.Z.zip` from its **Assets**, and extract it.
-2. Copy `index.html` and the whole `assets/` folder into a public folder of your site, such as `public/flipbook/`. Keep the folder structure.
-3. Put your PDF in `assets/books/`, and replace the last inline script in `index.html`:
+**Show it inside another page:**
 
 ```html
-<script>
-  $(() => openFlipbook("assets/books/sample.pdf", {
-    show_thumbnails: 1,
-    show_page_number: 1,
-    controls_size: "lg",
-    sound_flip: 1
-  }));
-</script>
+<iframe src="/flipbook.html" title="PDF flipbook" style="width: 100%; height: 80vh; border: 0" allow="fullscreen"></iframe>
 ```
 
-A self-hosted copy never changes by itself. To update, download the new ZIP and replace `assets/` (keep your `books/`).
+Add `#page/10` to the URL to open at page 10.
 
-### Embed in another page
+**Prefer self-hosting?** Download the ZIP from the newest [website release](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true), copy `index.html` and `assets/` to your site, and change the `openFlipbook(...)` path at the bottom of `index.html`.
 
-Either option gives you a standalone page. Embed it with an iframe:
+---
 
-```html
-<iframe
-  src="/flipbook/index.html"
-  title="PDF flipbook"
-  style="width: 100%; height: 80vh; border: 0"
-  allow="fullscreen"
-></iframe>
-```
+## Reference
 
-In React JSX, write the style as `style={{ width: "100%", height: "80vh", border: 0 }}`. To start at a specific page, add a hash to the URL: `/flipbook/index.html#page/10`.
-
-## Advanced
+Everything below is optional detail.
 
 ### Automatic updates
 
@@ -597,7 +474,7 @@ Each branch releases itself with [release-please](https://github.com/googleapis/
 1. Commits use the [Conventional Commits](https://www.conventionalcommits.org/) format. `fix: …` makes a patch release, `feat: …` a minor release, and `docs:`, `chore:` or `ci:` no release.
 2. Every push to `android` or `website` opens or updates a **release PR** on that branch. It bumps the branch's `version.txt` and adds the new section to its `CHANGELOG.md`.
 3. Merging the release PR creates the tag (`android-vX.Y.Z` or `website-vX.Y.Z`) and the GitHub Release. The Android workflow attaches the AAR and asks JitPack to build the tag; the website workflow attaches the ZIP.
-4. The badges in this README update automatically, and users who watch the repository's releases are notified.
+4. After the release, the workflow updates the version in this README (the Android dependency line and the website CDN URLs) and commits it to `main`. The badges update too, and users who watch the repository's releases are notified.
 
 A **CI** workflow on each branch runs on every push and pull request: Android builds the library and the sample app and checks the JitPack publication; the website checks that the scripts parse and that `index.html` only references files that exist.
 
