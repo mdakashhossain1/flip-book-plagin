@@ -46,6 +46,8 @@ Legend: ✅ same behaviour/values · ⚠️ same result, different technique · 
 | Tooltips | — | the web skips tooltips on touch devices (`$.isTouch`) |
 | `#loaderLine` progress bar (shown after 2 s) | `LoaderLineView` | ✅ |
 | 12-dot spinner (1.2 s, delays −1.1…−0.1 s) | `Spinner` | ✅ |
+| `.page-number-badge` (added in 0.2.0 on both): top-left, rgba(0,0,0,.4), 13 px, 24 px tall, centred on the toolbar | `PageNumberView` | ✅ |
+| `.thumb-strip` (added in 0.2.0 on both): 60 px thumbnails, 6 px gap, 76 px band above the slider, lazy render, active outline, centre on turn, hidden while zoomed | `ThumbStripView` | ✅ web uses native overflow scroll + IntersectionObserver; Android uses OverScroller + a 40-bitmap LRU |
 | `openFlipbook(url)` from a server/CDN: spinner until pdf.js has the document (needs CORS for cross-origin) | `FlipbookSource.Url` / `open("https://…")` | 🔧 same spinner; downloads the whole file once and caches it in `cacheDir` (PdfRenderer needs a seekable file), no CORS needed |
 
 ## Design options (scoreplusDesign)

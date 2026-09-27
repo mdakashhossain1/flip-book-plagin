@@ -33,6 +33,8 @@ flipbook.open("book.pdf", FlipbookDesign().apply {
     showRound = 1         // rounded pages
     controlsSize = "lg"   // bigger toolbar
     loadPage = -1         // reopen at the last page the reader saw
+    showThumbnails = 0    // hide the thumbnail strip above the slider
+    showPageNumber = 0    // hide the page number badge
 })
 ```
 

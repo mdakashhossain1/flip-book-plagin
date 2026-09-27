@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 – page badge and thumbnail strip
+
+Added to both the website and the Android library:
+
+- **Page number badge** in the top-left corner, e.g. `4-5 / 24`. It updates on every turn and is centred on the toolbar row. Turn it off with `showPageNumber = 0` (web: `show_page_number: 0`).
+- **Thumbnail strip** just above the page slider, with every page rendered as a small thumbnail. Swipe or fling it to browse; tap a thumbnail to open that page. The current page(s) are highlighted, and the strip centres on them after each turn. It hides while zoomed. Thumbnails render only as they scroll into view; Android keeps at most 40 in memory. On the web the mouse wheel scrolls it sideways. Turn it off with `showThumbnails = 0` (web: `show_thumbnails: 0`); the book then gets the space back.
+
 ## 0.1.5 – slider position
 
 - The page slider sat 8dp lower than on the website, touching the bottom edge. On the web the range input is inline, so its `.page-bar` box is 46px tall (38px input plus an 8px line gap), not 38px. The Android bar now uses the same 46dp box, so the track, page number and preview line up with the website.
