@@ -1,0 +1,3 @@
+-keep public class com.scoreplus.flipbook.FlipbookView { public *; }
+-keep public class com.scoreplus.flipbook.FlipbookDesign { *; }
+-keep public interface com.scoreplus.flipbook.FlipbookListener { *; }
