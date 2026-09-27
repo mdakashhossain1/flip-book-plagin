@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1 - JitPack Maven distribution
+
+- Publish the Android release library and sources using Gradle's `maven-publish` plugin.
+- Add a JitPack build configuration and Gradle dependency installation instructions.
+- Keep the viewer behavior from 0.2.0 unchanged.
+
 ## 0.2.0 – page badge and thumbnail strip
 
 Added to both the website and the Android library:

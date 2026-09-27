@@ -1,0 +1,4 @@
+jdk:
+  - openjdk17
+install:
+  - ./gradlew :flipbook:publishReleasePublicationToMavenLocal -Pversion=$VERSION --no-daemon

@@ -1,6 +1,12 @@
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
     alias(libs.plugins.android.library)
+    `maven-publish`
 }
+
+group = "com.github.mdakashhossain1.flip-book-plagin"
+version = providers.gradleProperty("version").orElse("android-v0.2.1").get()
 
 android {
     namespace = "com.scoreplus.flipbook"
@@ -14,5 +20,35 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = project.group.toString()
+            artifactId = "flipbook"
+            version = project.version.toString()
+
+            pom {
+                name.set("ScorePlus Flipbook")
+                description.set("Native Android PDF flipbook viewer with page-turn animation, zoom, and thumbnails.")
+                url.set("https://github.com/mdakashhossain1/flip-book-plagin")
+                scm {
+                    url.set("https://github.com/mdakashhossain1/flip-book-plagin")
+                    connection.set("scm:git:https://github.com/mdakashhossain1/flip-book-plagin.git")
+                }
+            }
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
     }
 }

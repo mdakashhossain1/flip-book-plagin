@@ -2,6 +2,37 @@
 
 A native Kotlin port of the ScorePlus web flipbook (turn.js + pdf.js). It uses the same page-curl engine, layout, controls, icons, sounds and options as the web version, with no WebView and no third-party dependencies. PDF pages are rendered with Android's built-in `PdfRenderer`.
 
+## Install with Gradle (JitPack)
+
+Add JitPack to the repositories in your project's `settings.gradle.kts`:
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+            content {
+                includeGroup("com.github.mdakashhossain1.flip-book-plagin")
+            }
+        }
+    }
+}
+```
+
+Add the library in your app's `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    implementation("com.github.mdakashhossain1.flip-book-plagin:flipbook:android-v0.2.1")
+}
+```
+
+Use `minSdk` 24 or higher and sync Gradle. Gradle downloads the library and its declared dependencies; no manual AAR copy is needed.
+
+The version is the Android Git tag. The older `android-v0.2.0` tag predates Maven publishing. See the [JitPack build](https://jitpack.io/#mdakashhossain1/flip-book-plagin/android-v0.2.1) and [release notes](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/android-v0.2.1).
+
 ## Quick start
 
 ```kotlin
@@ -66,6 +97,16 @@ Open the folder in Android Studio, or run:
 gradlew assembleDebug                 # builds the library and the sample app
 gradlew :flipbook:assembleRelease     # flipbook/build/outputs/aar/flipbook-release.aar
 ```
+
+## Maven publishing
+
+The `flipbook` module publishes its release AAR, POM, Gradle metadata, and Kotlin sources with Gradle's `maven-publish` plugin. Verify publication locally with:
+
+```powershell
+.\gradlew.bat :flipbook:publishReleasePublicationToMavenLocal "-Pversion=android-v0.2.1"
+```
+
+On macOS/Linux use `bash gradlew` in place of `.\gradlew.bat`. JitPack runs the command configured in `jitpack.yml` for the requested Git tag. See [JitPack's Android publishing guide](https://docs.jitpack.io/android/).
 
 ## Options
 
