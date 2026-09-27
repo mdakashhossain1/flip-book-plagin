@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.github.mdakashhossain1"
-version = providers.gradleProperty("version").orElse("android-v0.2.1").get()
+version = providers.gradleProperty("version").orElse("android-v0.2.2").get()
 
 android {
     namespace = "com.scoreplus.flipbook"

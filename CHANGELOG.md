@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.1 – badge and strip update with the flip
+## 0.2.2 – badge and strip update with the flip
 
 - The page badge and thumbnail strip updated only after the turn animation had finished (about 1 s), while the slider moved as soon as the flip started. Both now update when the flip starts, on the website and on Android.
 
