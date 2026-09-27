@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="google" content="notranslate" />
+    <meta name="robots" content="index, nofollow" />
+    <title>ScorePlus Flipbook</title>
+    <meta name="description" content="ScorePlus Flipbook" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ScorePlus Flipbook" />
+
+    <link rel="stylesheet" href="assets/css/flipbook.min.css" />
+    <script src="assets/pdfjs/pdf.min.js"></script>
+  </head>
+
+  <body>
+    <div id="loaderLine" class="loader-line" style="display: none"></div>
+    <div class="logo-backs"></div>
+
+    <div class="flipbook-title" style="display: none">
+      <h1></h1>
+      <h2></h2>
+      <p></p>
+    </div>
+
+    <div id="canvas">
+      <div id="pnlControls" class="controls-pdf controls-md" data-disable-events="true" style="display: none">
+        <a class="zoom-icon zoom-icon-in scoreplus-icon" style="display: none"></a>
+        <a id="btnFullscreen" class="fullscreen-button scoreplus-icon scoreplus-icn-fullscreen-on"></a>
+        <a id="btnSoundOff" class="scoreplus-icon scoreplus-icn-sound-on" style="display: none"></a>
+      </div>
+
+      <div id="pnlZoomStep" class="controls-pdf controls-zoom-step controls-md" style="display: none">
+        <a class="btnZoomMore scoreplus-icon scoreplus-icn-zoom-more" data-disable-events="true" data-disable-zoom="true"></a>
+        <a class="btnZoomLess scoreplus-icon scoreplus-icn-zoom-less" data-disable-events="true" data-disable-zoom="true"></a>
+      </div>
+
+      <div class="page-number-badge"></div>
+
+      <div id="magazineViewport" class="magazine-viewport">
+        <div class="magazine-viewport-loader" style="display: none"></div>
+      </div>
+    </div>
+
+    <script id="tplMagazine" type="text/x-template">
+      <div class="container">
+        <div class="magazine">
+          <div ignore="1" class="page-depth page-depth-left" style="display: none"></div>
+          <div ignore="1" class="page-depth page-depth-right" style="display: none"></div>
+          <div ignore="1" class="next-button btnNext" data-disable-events="true" data-disable-zoom="true"></div>
+          <div ignore="1" class="previous-button btnPrevious" data-disable-events="true" data-disable-zoom="true"></div>
+        </div>
+      </div>
+      <div class="bottom control-bottom">
+        <div class="thumb-strip" data-disable-events="true" data-disable-zoom="true"><div class="thumb-strip-track"></div></div>
+        <div class="page-bar">
+          <span class="page-bar-value" style="display: none"></span>
+          <span class="page-bar-num" style="display: none"></span>
+          <input class="page-bar-range" type="range" value="0" min="0" max="50" step="1" />
+        </div>
+      </div>
+      <div ignore="1" class="page-depth-label" style="display: none"></div>
+    </script>
+
+    <script src="assets/js/flipbook.min.js"></script>
+    <script>
+      $(() => openFlipbook("assets/books/v3/34e66879b9ccf9b7d10b9edc4ff714ece6d702fc.pdf"));
+    </script>
+  </body>
+</html>
