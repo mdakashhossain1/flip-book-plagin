@@ -10,8 +10,8 @@ android {
         applicationId = "com.scoreplus.flipbook.sample"
         minSdk = 24
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.2.0"
+        versionCode = 8
+        versionName = "0.2.1"
     }
 
     compileOptions {

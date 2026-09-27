@@ -672,15 +672,15 @@ class FlipbookView @JvmOverloads constructor(
         magazine.invalidate()
     }
 
-    private fun updatePageNumber() {
+    private fun updatePageNumber(page: Int? = null) {
         pageNumber.text = if (design.showPageNumber == 0 || numPages == 0) ""
-        else getVisiblePages().joinToString("-") + " / " + numPages
+        else getVisiblePages(page).joinToString("-") + " / " + numPages
         val wDp = width / density
         pageNumber.leftDp = if (wDp < 790) 5f else if (wDp < 930) 20f else 50f
         val bar = toolbar.panelBounds
         pageNumber.centerY = if (toolbar.hasIcons()) bar.centerY() else toolbar.top * density + 12f * density
         pageNumber.invalidate()
-        if (numPages > 0) strip.setActive(getVisiblePages())
+        if (numPages > 0) strip.setActive(getVisiblePages(page))
     }
 
     private fun calculateBound(width: Float, height: Float, boundWidth: Float, boundHeight: Float): FloatArray {
@@ -766,6 +766,7 @@ class FlipbookView @JvmOverloads constructor(
         if (page != null) {
             slider.setPage(page)
             showHide(page)
+            updatePageNumber(page)
             sounds?.turning(page, getVisiblePages())
         }
         listener?.onTurning(page)
