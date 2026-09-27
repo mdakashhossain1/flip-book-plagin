@@ -116,7 +116,7 @@ internal class PageSliderView(context: Context, private val host: SliderHost) : 
         val barW = kotlin.math.min(cbWidth, 700f * d)
         val left = cbLeft + (cbWidth - barW) / 2
         val bottom = viewport.bottom + 49f * d
-        val top = bottom - 38f * d
+        val top = bottom - 46f * d
         bar.set(left, top, left + barW, bottom)
         track.set(left, top + 15f * d, left + barW, top + 23f * d)
     }

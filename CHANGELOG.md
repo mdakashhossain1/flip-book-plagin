@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 – slider position
+
+- The page slider sat 8dp lower than on the website, touching the bottom edge. On the web the range input is inline, so its `.page-bar` box is 46px tall (38px input plus an 8px line gap), not 38px. The Android bar now uses the same 46dp box, so the track, page number and preview line up with the website.
+
 ## 0.1.4 – edge swipes no longer close the app
 
 - A page swipe starting at the very edge of the screen could trigger Android's back gesture and close the host screen, which looked like a crash. The back-gesture exclusion now reaches from the screen edge to the page corner zone, in a 200dp band centred on the page (Android's per-edge limit). Back still works above and below that band.
