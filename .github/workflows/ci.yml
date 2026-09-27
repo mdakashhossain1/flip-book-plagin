@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [website]
+  pull_request:
+    branches: [website]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check that the scripts parse
+        run: |
+          for f in assets/js/flipbook.min.js assets/pdfjs/pdf.min.js assets/pdfjs/pdf.worker.min.js; do
+            node -e "new Function(require('fs').readFileSync('$f', 'utf8'))"
+            echo "ok $f"
+          done
+      - name: Check that index.html references existing files
+        run: |
+          grep -oE '(href|src)="assets/[^"]+"' index.html | sed -E 's/.*"(.*)"/\1/' | while read -r f; do
+            test -f "$f" && echo "ok $f" || { echo "missing $f"; exit 1; }
+          done

@@ -1,0 +1,5 @@
+.github export-ignore
+.gitattributes export-ignore
+release-please-config.json export-ignore
+.release-please-manifest.json export-ignore
+version.txt export-ignore
