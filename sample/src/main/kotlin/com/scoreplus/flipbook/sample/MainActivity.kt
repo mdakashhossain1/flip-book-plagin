@@ -25,6 +25,6 @@ class MainActivity : Activity() {
             insets
         }
         setContentView(root)
-        flipbook.open("sample.pdf")
+        flipbook.open(intent.getStringExtra("url") ?: "sample.pdf")
     }
 }

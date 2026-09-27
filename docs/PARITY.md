@@ -46,6 +46,7 @@ Legend: ✅ same behaviour/values · ⚠️ same result, different technique · 
 | Tooltips | — | the web skips tooltips on touch devices (`$.isTouch`) |
 | `#loaderLine` progress bar (shown after 2 s) | `LoaderLineView` | ✅ |
 | 12-dot spinner (1.2 s, delays −1.1…−0.1 s) | `Spinner` | ✅ |
+| `openFlipbook(url)` from a server/CDN: spinner until pdf.js has the document (needs CORS for cross-origin) | `FlipbookSource.Url` / `open("https://…")` | 🔧 same spinner; downloads the whole file once and caches it in `cacheDir` (PdfRenderer needs a seekable file), no CORS needed |
 
 ## Design options (scoreplusDesign)
 

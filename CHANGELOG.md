@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3 – remote PDFs
+
+- `FlipbookSource.Url(url, headers, refresh)`, and `open(path)` now accepts `http(s)://` links. The loading spinner shows while the file downloads, as on the website. Downloads are cached in `cacheDir` and reused unless `refresh = true`.
+- The library manifest declares `INTERNET`.
+- The page slider stays hidden until the book has loaded.
+- Sample app: pass `--es url <link>` to open a remote PDF.
+
 ## 0.1.2 – clean audio logs
 
 - Android 14+: sounds play through `MediaPlayer` with a declared `flipbook` attribution tag (merged into the host app's manifest). This stops system_server logging `AppOps: attributionTag not declared in manifest` on every page-turn sound. Older Android versions keep using `SoundPool`.

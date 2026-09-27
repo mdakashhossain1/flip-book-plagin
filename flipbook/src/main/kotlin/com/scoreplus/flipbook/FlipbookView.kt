@@ -69,8 +69,13 @@ class FlipbookView @JvmOverloads constructor(
             toolbar.invalidate()
         }
 
-    fun open(assetPath: String, design: FlipbookDesign = FlipbookDesign()) =
-        open(FlipbookSource.Asset(assetPath), design)
+    /** [path] is an `http(s)://` link (server / CDN) or a file in the app's `assets/` folder. */
+    fun open(path: String, design: FlipbookDesign = FlipbookDesign()) =
+        open(
+            if (path.startsWith("http://", true) || path.startsWith("https://", true)) FlipbookSource.Url(path)
+            else FlipbookSource.Asset(path),
+            design,
+        )
 
     fun open(source: FlipbookSource, design: FlipbookDesign = FlipbookDesign()) {
         release()
@@ -110,6 +115,8 @@ class FlipbookView @JvmOverloads constructor(
         loadedPages.clear()
         book = null
         numPages = 0
+        slider.numPages = 0
+        slider.invalidate()
         magazine.ready = false
     }
 

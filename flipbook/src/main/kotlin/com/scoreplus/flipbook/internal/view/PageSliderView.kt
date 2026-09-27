@@ -206,7 +206,7 @@ internal class PageSliderView(context: Context, private val host: SliderHost) : 
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (showSlider == 0 || !barVisible || barAlpha <= 0f) return false
+        if (showSlider == 0 || numPages == 0 || !barVisible || barAlpha <= 0f) return false
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 layoutBar()
@@ -239,7 +239,7 @@ internal class PageSliderView(context: Context, private val host: SliderHost) : 
     }
 
     override fun onDraw(canvas: Canvas) {
-        if (showSlider == 0) return
+        if (showSlider == 0 || numPages == 0) return
         val now = SystemClock.uptimeMillis()
         var animating = false
         if (barFading) {

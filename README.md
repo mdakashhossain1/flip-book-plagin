@@ -17,6 +17,15 @@ flipbook.open(FlipbookSource.LocalFile(file))
 flipbook.open(FlipbookSource.ContentUri(uri))
 ```
 
+Remote PDFs (a server or CDN) work the same way. The viewer shows its loading spinner while the file downloads, then caches it, so the next open is instant:
+
+```kotlin
+flipbook.open("https://cdn.example.com/books/sample.pdf")
+flipbook.open(FlipbookSource.Url(url, headers = mapOf("Authorization" to "Bearer …"), refresh = true))
+```
+
+The library declares the `INTERNET` permission for you. Android blocks plain `http://` by default, so use `https://` or allow the host in your app's network security config.
+
 Options, which match the web `FLIPBOOK_DEFAULT_DESIGN`:
 
 ```kotlin

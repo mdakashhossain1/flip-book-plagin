@@ -12,6 +12,10 @@ import android.os.ParcelFileDescriptor
 import com.scoreplus.flipbook.FlipbookSource
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
+import java.security.MessageDigest
 
 internal class PdfInfo(val pageCount: Int, val firstPageWidth: Float, val firstPageHeight: Float)
 
@@ -73,6 +77,54 @@ internal class PdfEngine(private val context: Context) {
             }
             ParcelFileDescriptor.open(cached, ParcelFileDescriptor.MODE_READ_ONLY)
         }
+        is FlipbookSource.Url -> ParcelFileDescriptor.open(download(source), ParcelFileDescriptor.MODE_READ_ONLY)
+    }
+
+    private fun download(source: FlipbookSource.Url): File {
+        val digest = MessageDigest.getInstance("SHA-1").digest(source.url.toByteArray())
+        val key = digest.joinToString("") { "%02x".format(it) }
+        val cached = File(context.cacheDir, "flipbook_url_$key.pdf")
+        if (cached.exists() && cached.length() > 0 && !source.refresh) return cached
+        var url = URL(source.url)
+        var connection: HttpURLConnection
+        var redirects = 0
+        while (true) {
+            connection = url.openConnection() as HttpURLConnection
+            connection.connectTimeout = 15_000
+            connection.readTimeout = 30_000
+            connection.instanceFollowRedirects = true
+            for ((k, v) in source.headers) connection.setRequestProperty(k, v)
+            val code = connection.responseCode
+            if (code in 300..399 && redirects < 5) {
+                val location = connection.getHeaderField("Location") ?: break
+                url = URL(url, location)
+                connection.disconnect()
+                redirects++
+                continue
+            }
+            if (code !in 200..299) {
+                connection.disconnect()
+                throw IOException("HTTP $code while downloading ${source.url}")
+            }
+            break
+        }
+        val partial = File(context.cacheDir, "flipbook_url_$key.part")
+        try {
+            connection.inputStream.use { input ->
+                FileOutputStream(partial).use { output -> input.copyTo(output) }
+            }
+        } finally {
+            connection.disconnect()
+        }
+        if (closed) {
+            partial.delete()
+            throw IOException("Cancelled")
+        }
+        if (!partial.renameTo(cached)) {
+            partial.copyTo(cached, overwrite = true)
+            partial.delete()
+        }
+        return cached
     }
 
     private fun sizeOf(r: PdfRenderer, page: Int): FloatArray =
