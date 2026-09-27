@@ -544,7 +544,27 @@ internal class MagazineView(context: Context, private val host: MagazineHost) : 
         canvas.concat(tmpMatrix)
     }
 
+    private val exclusionRects = ArrayList<Rect>()
+    private val lastExclusion = Rect()
+
+    /** Keeps Android's edge back-gesture from stealing page-corner drags near the screen edge. */
+    private fun updateGestureExclusion() {
+        if (android.os.Build.VERSION.SDK_INT < 29 || !ready) return
+        val corner = (60f * density).toInt()
+        val l = magLeft().toInt()
+        val t = magTop().toInt()
+        val r = (magLeft() + magW).toInt()
+        val b = (magTop() + magH).toInt()
+        if (lastExclusion.left == l && lastExclusion.top == t && lastExclusion.right == r && lastExclusion.bottom == b) return
+        lastExclusion.set(l, t, r, b)
+        exclusionRects.clear()
+        exclusionRects.add(Rect(l, t, l + corner, b))
+        exclusionRects.add(Rect(r - corner, t, r, b))
+        systemGestureExclusionRects = exclusionRects
+    }
+
     override fun onDraw(canvas: Canvas) {
+        updateGestureExclusion()
         val time = now()
         var animating = stepMargin(time) or stepZoom(time) or stepArrows(time) or stepDepth(time)
         canvas.save()
