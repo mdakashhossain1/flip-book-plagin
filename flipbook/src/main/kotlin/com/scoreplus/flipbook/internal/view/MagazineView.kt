@@ -14,6 +14,7 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
+import android.os.Build
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
@@ -547,19 +548,24 @@ internal class MagazineView(context: Context, private val host: MagazineHost) : 
     private val exclusionRects = ArrayList<Rect>()
     private val lastExclusion = Rect()
 
-    /** Keeps Android's edge back-gesture from stealing page-corner drags near the screen edge. */
+    /**
+     * Keeps Android's edge back-gesture from stealing page drags, from the screen edge to the page corner zone.
+     * Android honours at most 200dp of exclusion per edge, so the band is capped there and centred on the page.
+     */
     private fun updateGestureExclusion() {
-        if (android.os.Build.VERSION.SDK_INT < 29 || !ready) return
+        if (Build.VERSION.SDK_INT < 29 || !ready) return
         val corner = (60f * density).toInt()
-        val l = magLeft().toInt()
-        val t = magTop().toInt()
-        val r = (magLeft() + magW).toInt()
-        val b = (magTop() + magH).toInt()
+        val half = (100f * density).toInt()
+        val cy = (magTop() + magH / 2).toInt()
+        val t = maxOf(magTop().toInt(), cy - half)
+        val b = minOf((magTop() + magH).toInt(), cy + half)
+        val l = magLeft().toInt() + corner
+        val r = (magLeft() + magW).toInt() - corner
         if (lastExclusion.left == l && lastExclusion.top == t && lastExclusion.right == r && lastExclusion.bottom == b) return
         lastExclusion.set(l, t, r, b)
         exclusionRects.clear()
-        exclusionRects.add(Rect(l, t, l + corner, b))
-        exclusionRects.add(Rect(r - corner, t, r, b))
+        exclusionRects.add(Rect(0, t, l, b))
+        exclusionRects.add(Rect(r, t, width, b))
         systemGestureExclusionRects = exclusionRects
     }
 

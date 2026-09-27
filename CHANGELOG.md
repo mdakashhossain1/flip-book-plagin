@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 – edge swipes no longer close the app
+
+- A page swipe starting at the very edge of the screen could trigger Android's back gesture and close the host screen, which looked like a crash. The back-gesture exclusion now reaches from the screen edge to the page corner zone, in a 200dp band centred on the page (Android's per-edge limit). Back still works above and below that band.
+- The slider preview skips a thumbnail that was already freed, instead of drawing it.
+
 ## 0.1.3 – remote PDFs
 
 - `FlipbookSource.Url(url, headers, refresh)`, and `open(path)` now accepts `http(s)://` links. The loading spinner shows while the file downloads, as on the website. Downloads are cached in `cacheDir` and reused unless `refresh = true`.

@@ -283,10 +283,10 @@ internal class PageSliderView(context: Context, private val host: SliderHost) : 
 
     private fun drawPreview(canvas: Canvas) {
         val d = density
-        val a = thumbA ?: return
+        val a = thumbA?.takeUnless { it.isRecycled } ?: return
         val imgH = 130f * d
         val wa = a.width * imgH / a.height
-        val b = thumbB
+        val b = thumbB?.takeUnless { it.isRecycled }
         val wb = if (b != null) b.width * imgH / b.height else 0f
         val boxW = wa + wb + 20f * d
         val top = bar.top - (if (numEnabled()) 195f else 168f) * d
