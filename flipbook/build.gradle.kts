@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.github.mdakashhossain1.flip-book-plagin"
+group = "com.github.mdakashhossain1"
 version = providers.gradleProperty("version").orElse("android-v0.2.1").get()
 
 android {
@@ -33,7 +33,7 @@ publishing {
     publications {
         register<MavenPublication>("release") {
             groupId = project.group.toString()
-            artifactId = "flipbook"
+            artifactId = "flip-book-plagin"
             version = project.version.toString()
 
             pom {

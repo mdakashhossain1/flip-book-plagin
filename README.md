@@ -14,7 +14,7 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://jitpack.io")
             content {
-                includeGroup("com.github.mdakashhossain1.flip-book-plagin")
+                includeGroup("com.github.mdakashhossain1")
             }
         }
     }
@@ -25,7 +25,7 @@ Add the library in your app's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.github.mdakashhossain1.flip-book-plagin:flipbook:android-v0.2.1")
+    implementation("com.github.mdakashhossain1:flip-book-plagin:android-v0.2.1")
 }
 ```
 
