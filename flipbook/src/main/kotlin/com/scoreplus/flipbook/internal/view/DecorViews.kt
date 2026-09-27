@@ -128,3 +128,29 @@ internal class TitleView(context: Context) : View(context) {
         }
     }
 }
+
+/** `.page-number-badge`: current page(s) in the top-left corner, e.g. "4-5 / 24". */
+internal class PageNumberView(context: Context) : View(context) {
+    private val density = resources.displayMetrics.density
+    private val bg = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = rgba(0, 0, 0, 0.4) }
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        typeface = Typeface.SANS_SERIF
+    }
+    private val rect = RectF()
+    var text = ""
+    var leftDp = 5f
+    var centerY = 0f
+
+    override fun onDraw(canvas: Canvas) {
+        if (text.isEmpty()) return
+        val d = density
+        textPaint.textSize = 13f * d
+        val w = textPaint.measureText(text) + 20f * d
+        val h = 24f * d
+        rect.set(leftDp * d, centerY - h / 2, leftDp * d + w, centerY + h / 2)
+        canvas.drawRoundRect(rect, 3f * d, 3f * d, bg)
+        val fm = textPaint.fontMetrics
+        canvas.drawText(text, rect.left + 10f * d, rect.centerY() - (fm.ascent + fm.descent) / 2, textPaint)
+    }
+}

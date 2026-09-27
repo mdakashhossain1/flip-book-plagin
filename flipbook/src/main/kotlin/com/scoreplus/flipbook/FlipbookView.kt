@@ -33,6 +33,7 @@ import com.scoreplus.flipbook.internal.view.LoaderLineView
 import com.scoreplus.flipbook.internal.view.MagazineHost
 import com.scoreplus.flipbook.internal.view.MagazineView
 import com.scoreplus.flipbook.internal.view.PageContent
+import com.scoreplus.flipbook.internal.view.PageNumberView
 import com.scoreplus.flipbook.internal.view.PageSliderView
 import com.scoreplus.flipbook.internal.view.SliderHost
 import com.scoreplus.flipbook.internal.view.TitleView
@@ -115,6 +116,8 @@ class FlipbookView @JvmOverloads constructor(
         loadedPages.clear()
         book = null
         numPages = 0
+        pageNumber.text = ""
+        pageNumber.invalidate()
         slider.numPages = 0
         slider.invalidate()
         magazine.ready = false
@@ -242,10 +245,11 @@ class FlipbookView @JvmOverloads constructor(
     private val slider = PageSliderView(context, sliderHost)
     private val zoomStep = ZoomStepView(context) { onZoomStep(it) }
     private val toolbar = ToolbarView(context) { onToolbar(it) }
+    private val pageNumber = PageNumberView(context)
     private val zoom = ZoomController(magazine, zoomHost)
 
     init {
-        for (v in listOf(background, title, magazine, loaderLine, slider, zoomStep, toolbar)) {
+        for (v in listOf(background, title, magazine, loaderLine, slider, pageNumber, zoomStep, toolbar)) {
             addView(v, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         }
         isFocusable = true
@@ -641,7 +645,18 @@ class FlipbookView @JvmOverloads constructor(
         slider.configure()
         slider.setPage(b.page)
         adjustPageDepth(b.page)
+        updatePageNumber()
         magazine.invalidate()
+    }
+
+    private fun updatePageNumber() {
+        pageNumber.text = if (design.showPageNumber == 0 || numPages == 0) ""
+        else getVisiblePages().joinToString("-") + " / " + numPages
+        val wDp = width / density
+        pageNumber.leftDp = if (wDp < 790) 5f else if (wDp < 930) 20f else 50f
+        val bar = toolbar.panelBounds
+        pageNumber.centerY = if (toolbar.hasIcons()) bar.centerY() else toolbar.top * density + 12f * density
+        pageNumber.invalidate()
     }
 
     private fun calculateBound(width: Float, height: Float, boundWidth: Float, boundHeight: Float): FloatArray {
@@ -736,6 +751,7 @@ class FlipbookView @JvmOverloads constructor(
         zoom.turned()
         showHide(page)
         adjustResolution(0)
+        updatePageNumber()
         if (design.loadPage == -1) prefs.edit().putInt("lastpage-$name", page).apply()
         listener?.onTurned(page, getVisiblePages())
     }

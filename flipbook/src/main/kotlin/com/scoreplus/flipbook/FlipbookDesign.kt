@@ -51,6 +51,7 @@ class FlipbookDesign {
     /** null / "md", "sm" or "lg". */
     var controlsSize: String? = null
     var soundFlip: Int = 1
+    var showPageNumber: Int = 1
 
     /** web URL option `?page=` */
     var startPage: Int? = null

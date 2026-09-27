@@ -19,6 +19,7 @@ internal abstract class PanelView(context: Context) : View(context) {
     protected val sprite = IconSprite(resources)
     protected val panelPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = rgba(255, 255, 255, 0.85) }
     protected val panel = RectF()
+    val panelBounds: RectF get() = panel
     protected var alphaValue = 1f
     private var fadeFrom = 1f
     private var fadeTo = 1f
