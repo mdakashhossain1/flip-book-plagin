@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/mdakashhossain1/flip-book-plagin/compare/android-v0.2.1...android-v0.2.2) (2026-09-27)
+
+
+### Bug Fixes
+
+* update the page badge and thumbnail strip when a flip starts ([3f8a6cf](https://github.com/mdakashhossain1/flip-book-plagin/commit/3f8a6cfd877bc3780431e8c864d0ef0ee6d970f3))
+
 ## 0.2.1 - JitPack Maven distribution
 
 - Publish the Android release library and sources using Gradle's `maven-publish` plugin.
