@@ -198,56 +198,25 @@ fun Flipbook(
 }
 ```
 
-Use it in a screen, with your own buttons wired to the viewer:
+Use it in a screen:
 
 ```kotlin
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.scoreplus.flipbook.FlipbookView
 
 @Composable
 fun ReaderScreen() {
-    var flipbook by remember { mutableStateOf<FlipbookView?>(null) }
-    var page by remember { mutableIntStateOf(1) }
-    var pageCount by remember { mutableIntStateOf(0) }
-
-    Column(Modifier.fillMaxSize().safeDrawingPadding()) {
-        Flipbook(
-            source = "books/sample.pdf",
-            modifier = Modifier.weight(1f).fillMaxWidth(),
-            design = {
-                showThumbnails = 1
-                showPageNumber = 1
-                controlsSize = "lg"
-            },
-            onLoaded = { pageCount = it },
-            onPageChanged = { current, _ -> page = current },
-            onViewReady = { flipbook = it },
-        )
-        Row(
-            Modifier.fillMaxWidth().padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Button(onClick = { flipbook?.previousPage() }) { Text("Previous") }
-            Text("Page $page of $pageCount")
-            Button(onClick = { flipbook?.nextPage() }) { Text("Next") }
-        }
-    }
+    Flipbook(
+        source = "books/sample.pdf",
+        modifier = Modifier.fillMaxSize().safeDrawingPadding(),
+        design = {
+            showThumbnails = 1
+            showPageNumber = 1
+            controlsSize = "lg"
+        },
+    )
 }
 ```
 
