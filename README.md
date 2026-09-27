@@ -6,36 +6,53 @@ A PDF flipbook viewer for Android apps and websites, with page-turn animation, z
 
 | Branch | Contents | Use in your project |
 | --- | --- | --- |
-| [`android`](https://github.com/mdakashhossain1/flip-book-plagin/tree/android) | Native Kotlin library and sample app | Download the AAR release and add it to your Android app |
+| [`android`](https://github.com/mdakashhossain1/flip-book-plagin/tree/android) | Native Kotlin library and sample app | Add the Maven dependency through JitPack |
 | [`website`](https://github.com/mdakashhossain1/flip-book-plagin/tree/website) | Static HTML, JavaScript, CSS, and assets | Download the ZIP release, host it, and embed it with an iframe |
 | `main` | This getting-started guide | Start here and choose a platform |
 
-## Download from GitHub Releases
+## Releases
 
 | Platform | Release notes | Ready-to-use download |
 | --- | --- | --- |
-| Android | [Android v0.2.0](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/android-v0.2.0) | [Download the AAR](https://github.com/mdakashhossain1/flip-book-plagin/releases/download/android-v0.2.0/scoreplus-flipbook-android-0.2.0.aar) |
+| Android | [Android v0.2.1](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/android-v0.2.1) | [Install through JitPack](#android) |
 | Website | [Website v0.2.0](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/website-v0.2.0) | [Download the ZIP](https://github.com/mdakashhossain1/flip-book-plagin/releases/download/website-v0.2.0/scoreplus-flipbook-website-0.2.0.zip) |
 
-Download the named AAR or ZIP from the release's **Assets** section. These packages are ready to integrate; you do not need to clone or build the repository. Each platform's source remains on its own branch.
+Install Android through Gradle using the JitPack Maven repository. For the website, download the ZIP from the GitHub release's **Assets** section. You do not need to clone or build the repository. Each platform's source remains on its own branch.
 
 ## Android
 
-### 1. Download the library
+### 1. Add the JitPack Maven repository
 
-Download [`scoreplus-flipbook-android-0.2.0.aar`](https://github.com/mdakashhossain1/flip-book-plagin/releases/download/android-v0.2.0/scoreplus-flipbook-android-0.2.0.aar) from the Android GitHub Release. The library requires Android 7.0 / API 24 or later.
-
-### 2. Add it to your app
-
-Copy the AAR to your app's `app/libs/` folder. In `app/build.gradle.kts`, add this dependency to your existing dependencies block:
+In your project's `settings.gradle.kts`, add JitPack inside the existing `dependencyResolutionManagement.repositories` block:
 
 ```kotlin
-dependencies {
-    implementation(files("libs/scoreplus-flipbook-android-0.2.0.aar"))
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+            content {
+                includeGroup("com.github.mdakashhossain1")
+            }
+        }
+    }
 }
 ```
 
-Set your app's `minSdk` to at least `24`, then sync Gradle.
+### 2. Add it to your app
+
+In `app/build.gradle.kts`, add this dependency to your existing dependencies block:
+
+```kotlin
+dependencies {
+    implementation("com.github.mdakashhossain1:flip-book-plagin:android-v0.2.1")
+}
+```
+
+Set your app's `minSdk` to at least `24` (Android 7.0), then sync Gradle. Gradle downloads the library and its declared dependencies automatically.
+
+The version matches the Android Git tag. Use `android-v0.2.1` or a later Android release configured for Maven publishing; the older `android-v0.2.0` release was distributed as a manual AAR download. [View the JitPack build](https://jitpack.io/#mdakashhossain1/flip-book-plagin/android-v0.2.1).
 
 ### 3. Display a PDF
 
@@ -131,7 +148,9 @@ cd flipbook-android
 
 Open the project in Android Studio and configure the Android SDK. The source project uses `compileSdk 36` and configures Gradle to use JDK 25.
 
-Build on Windows with `.\gradlew.bat :flipbook:assembleRelease` or on macOS/Linux with `bash gradlew :flipbook:assembleRelease`. The output is `flipbook/build/outputs/aar/flipbook-release.aar`. If you use this locally built file, use its filename in your app's Gradle dependency.
+Build on Windows with `.\gradlew.bat :flipbook:assembleRelease` or on macOS/Linux with `bash gradlew :flipbook:assembleRelease`. The output is `flipbook/build/outputs/aar/flipbook-release.aar`.
+
+To verify Maven publication locally, run `.\gradlew.bat :flipbook:publishReleasePublicationToMavenLocal "-Pversion=android-v0.2.1"`. JitPack uses the publication configured on the Android branch to serve the library from each supported Android Git tag. See [JitPack's Android publishing guide](https://docs.jitpack.io/android/) for the publishing workflow.
 
 For website development, clone the static viewer source:
 
@@ -139,4 +158,4 @@ For website development, clone the static viewer source:
 git clone --branch website --single-branch https://github.com/mdakashhossain1/flip-book-plagin.git flipbook-website
 ```
 
-Published releases use platform-specific tags: `android-v0.2.0` and `website-v0.2.0`. Browse [all GitHub Releases](https://github.com/mdakashhossain1/flip-book-plagin/releases) for download files, installation notes, and SHA-256 checksums.
+Published releases use platform-specific tags: `android-v0.2.1` and `website-v0.2.0`. Browse [all GitHub Releases](https://github.com/mdakashhossain1/flip-book-plagin/releases) for installation notes and website downloads.
