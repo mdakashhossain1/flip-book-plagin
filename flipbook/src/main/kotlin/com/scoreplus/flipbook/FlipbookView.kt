@@ -935,6 +935,7 @@ class FlipbookView @JvmOverloads constructor(
                 pinchStartDist = 0f
             }
             MotionEvent.ACTION_UP -> {
+                sounds?.userActivated = true
                 zoom.moveEnd()
                 if (!multiTouch && !tapMoved && ev.eventTime - tapDownTime < 250) onTap(x, y, ev.eventTime)
             }
@@ -961,6 +962,7 @@ class FlipbookView @JvmOverloads constructor(
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        sounds?.userActivated = true
         val rtl = design.rtl == 1
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> controlsGoTo(if (rtl) NEXT else PREVIOUS)

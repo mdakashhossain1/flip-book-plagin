@@ -39,7 +39,7 @@ Legend: ✅ same behaviour/values · ⚠️ same result, different technique · 
 | Slider: 8 px track, 87×10 thumb, `positionSliderThumb`, `rangeToPage`, preview 150 px bubble with tail (thumbnail 253 px wide, 130 px tall), number label, 100 ms debounce, 500 ms fade | `PageSliderView` | ✅ |
 | Corner arrows (32 px, sprite cell 6, next mirrored, bottom 5, outside ±42 or inside when ≤ 750 px), arrows 0/2/3 | `MagazineView.drawArrows` | ✅ |
 | Arrows reappear on zoom-out even on page 1 (jQuery `fadeIn` shows hidden elements) | only the arrows that `showHide` allows reappear | 🔧 fixes a visible web glitch |
-| Sounds: flip-sm 0.1 on corner grab, flip-md / flip-lg 0.2 on turn (lg when skipping pages) | `FlipSounds` (SoundPool) | ✅ same files and volumes |
+| Sounds: flip-sm.mp3 0.1 on corner grab, flip-md.mp3 / flip-lg.mp3 0.2 on turn (lg when skipping pages); silent until the first user interaction | `FlipSounds` (SoundPool) | ✅ same custom files, volumes and gate |
 | Fullscreen button | immersive system bars | ⚠️ |
 | Keyboard ←/→, Esc | `onKeyDown` | ✅ |
 | Mouse-wheel page turning, hover peel with a mouse | — | not applicable on touch (the web ignores these on touch devices too) |

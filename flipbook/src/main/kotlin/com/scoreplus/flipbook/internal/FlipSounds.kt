@@ -24,12 +24,15 @@ internal class FlipSounds(context: Context) {
     var enabled = true
     var pageTurnSound = true
 
+    /** Like the web version, stays silent until the reader has interacted (web: navigator.userActivation). */
+    var userActivated = false
+
     fun peelStart() {
-        if (enabled && pageTurnSound) play(0, small, 0.1f)
+        if (enabled && pageTurnSound && userActivated) play(0, small, 0.1f)
     }
 
     fun turning(page: Int?, visible: IntArray) {
-        if (!enabled || !pageTurnSound || page == null) return
+        if (!enabled || !pageTurnSound || !userActivated || page == null) return
         val far = page < visible[0] - 1 ||
             (visible.size == 2 && page > visible[1] + 1) ||
             (visible.size == 1 && page > visible[0] + 1)

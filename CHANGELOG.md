@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 – custom sounds
+
+- Replaced the page-turn sounds with the custom ScorePlus sounds (`flip-sm.mp3`, `flip-md.mp3`, `flip-lg.mp3`, 48 kHz), the same files the website now uses. They're mp3 instead of wav, so the library is about 300 KB smaller.
+- Sounds stay silent until the reader first touches the screen or presses a key, matching the website fix, where browsers block audio before any user interaction. An automatic turn to a saved or start page is therefore silent.
+
 ## 0.1.0 – initial port
 
 - Kotlin library `flipbook` (minSdk 24, no dependencies) and `sample` app.
