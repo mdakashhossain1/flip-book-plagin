@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 – clean audio logs
+
+- Android 14+: sounds play through `MediaPlayer` with a declared `flipbook` attribution tag (merged into the host app's manifest). This stops system_server logging `AppOps: attributionTag not declared in manifest` on every page-turn sound. Older Android versions keep using `SoundPool`.
+
 ## 0.1.1 – custom sounds
 
 - Replaced the page-turn sounds with the custom ScorePlus sounds (`flip-sm.mp3`, `flip-md.mp3`, `flip-lg.mp3`, 48 kHz), the same files the website now uses. They're mp3 instead of wav, so the library is about 300 KB smaller.
