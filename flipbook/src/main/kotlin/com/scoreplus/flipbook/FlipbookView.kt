@@ -35,6 +35,8 @@ import com.scoreplus.flipbook.internal.view.MagazineView
 import com.scoreplus.flipbook.internal.view.PageContent
 import com.scoreplus.flipbook.internal.view.PageNumberView
 import com.scoreplus.flipbook.internal.view.PageSliderView
+import com.scoreplus.flipbook.internal.view.ThumbStripHost
+import com.scoreplus.flipbook.internal.view.ThumbStripView
 import com.scoreplus.flipbook.internal.view.SliderHost
 import com.scoreplus.flipbook.internal.view.TitleView
 import com.scoreplus.flipbook.internal.view.ToolbarView
@@ -119,6 +121,7 @@ class FlipbookView @JvmOverloads constructor(
         pageNumber.text = ""
         pageNumber.invalidate()
         slider.numPages = 0
+        strip.clear()
         slider.invalidate()
         magazine.ready = false
     }
@@ -211,6 +214,14 @@ class FlipbookView @JvmOverloads constructor(
         override fun onSliderTouch() = firstInteraction()
     }
 
+    private val stripHost = object : ThumbStripHost {
+        override fun stripThumbnail(page: Int, widthPx: Int, done: (Bitmap?) -> Unit) {
+            engine?.renderPage(page, widthPx, done) ?: done(null)
+        }
+        override fun onStripPage(page: Int) = controlsGoTo(page)
+        override fun onStripTouch() = firstInteraction()
+    }
+
     private val zoomHost = object : ZoomHost {
         override val canvasWidth: Float get() = width.toFloat()
         override val canvasHeight: Float get() = height.toFloat()
@@ -218,6 +229,8 @@ class FlipbookView @JvmOverloads constructor(
         override fun setZoomInControls() {
             disableTurnEvents = true
             if (design.showSlider != 0) slider.hideBarNow()
+            strip.shown = false
+            strip.invalidate()
             toolbar.zoomedIn = true
             toolbar.invalidate()
             if (!zoomStep.shown) zoomStep.fade(true)
@@ -226,6 +239,8 @@ class FlipbookView @JvmOverloads constructor(
         override fun setZoomOutControls() {
             disableTurnEvents = false
             if (design.showSlider != 0 && !slider.barVisible) slider.fadeBar(true)
+            strip.shown = design.showThumbnails != 0
+            strip.invalidate()
             progressBar("cancel")
             toolbar.zoomedIn = false
             toolbar.invalidate()
@@ -246,10 +261,11 @@ class FlipbookView @JvmOverloads constructor(
     private val zoomStep = ZoomStepView(context) { onZoomStep(it) }
     private val toolbar = ToolbarView(context) { onToolbar(it) }
     private val pageNumber = PageNumberView(context)
+    private val strip = ThumbStripView(context, stripHost)
     private val zoom = ZoomController(magazine, zoomHost)
 
     init {
-        for (v in listOf(background, title, magazine, loaderLine, slider, pageNumber, zoomStep, toolbar)) {
+        for (v in listOf(background, title, magazine, loaderLine, strip, slider, pageNumber, zoomStep, toolbar)) {
             addView(v, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         }
         isFocusable = true
@@ -317,6 +333,9 @@ class FlipbookView @JvmOverloads constructor(
         }
         magazine.numPages = numPages
         slider.numPages = numPages
+        strip.numPages = numPages
+        strip.aspect = if (renderAspectRatio > 0) renderAspectRatio else 1.414f
+        strip.shown = design.showThumbnails != 0
         sounds?.pageTurnSound = design.soundFlip == 1
         render()
         slider.configure()
@@ -595,10 +614,14 @@ class FlipbookView @JvmOverloads constructor(
         val arrows = if (design.arrows != 3 && wDp > 750) (if (design.arrows == 1) 32f else 14f) else 0f
         val padLR = (canvasH + arrows) * density
         val padT = canvasV * density
-        val padB = ((if (design.showSlider == 0) 0f else 24f) + canvasV) * density
+        val stripPad = if (design.showThumbnails == 0) 0f else 76f
+        val padB = ((if (design.showSlider == 0) 0f else 24f) + stripPad + canvasV) * density
+        slider.extraBottom = stripPad
         magazine.viewport.set(padLR, padT, width - padLR, height - padB)
         magazine.mediaWidthDp = wDp
         slider.viewport = RectF(magazine.viewport)
+        strip.viewport = RectF(magazine.viewport)
+        strip.invalidate()
         title.windowWidthDp = wDp
         title.invalidate()
         slider.invalidate()
@@ -657,6 +680,7 @@ class FlipbookView @JvmOverloads constructor(
         val bar = toolbar.panelBounds
         pageNumber.centerY = if (toolbar.hasIcons()) bar.centerY() else toolbar.top * density + 12f * density
         pageNumber.invalidate()
+        if (numPages > 0) strip.setActive(getVisiblePages())
     }
 
     private fun calculateBound(width: Float, height: Float, boundWidth: Float, boundHeight: Float): FloatArray {
@@ -971,7 +995,7 @@ class FlipbookView @JvmOverloads constructor(
 
     private fun onTap(x: Float, y: Float, time: Long) {
         val onControls = toolbar.containsPoint(x, y)
-        val disableZoom = zoomStep.containsPoint(x, y) || magazine.isOnArrow(x, y)
+        val disableZoom = zoomStep.containsPoint(x, y) || magazine.isOnArrow(x, y) || strip.containsPoint(x, y)
         val isDouble = time - lastTapTime < 300 && hypot(x - lastTapX, y - lastTapY) < 10f * density
         if (isDouble) {
             if (!preventDoubleTap && !onControls && !disableZoom && design.clickZoom != 0) zoom.toggle()

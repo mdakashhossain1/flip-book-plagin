@@ -47,6 +47,7 @@ internal class PageSliderView(context: Context, private val host: SliderHost) : 
     var value = 1
         private set
     var barVisible = true
+    var extraBottom = 0f
     private var barAlpha = 1f
     private var barFadeFrom = 1f
     private var barFadeTo = 1f
@@ -115,7 +116,7 @@ internal class PageSliderView(context: Context, private val host: SliderHost) : 
         val cbWidth = viewport.width() * 0.9f
         val barW = kotlin.math.min(cbWidth, 700f * d)
         val left = cbLeft + (cbWidth - barW) / 2
-        val bottom = viewport.bottom + 49f * d
+        val bottom = viewport.bottom + (49f + extraBottom) * d
         val top = bottom - 46f * d
         bar.set(left, top, left + barW, bottom)
         track.set(left, top + 15f * d, left + barW, top + 23f * d)
