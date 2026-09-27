@@ -7,6 +7,8 @@ import com.scoreplus.flipbook.FlipbookView
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(FlipbookView(this))
+        val flipbook = FlipbookView(this)
+        setContentView(flipbook)
+        flipbook.open("sample.pdf")
     }
 }
