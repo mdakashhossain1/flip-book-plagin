@@ -1,5 +1,9 @@
 # ScorePlus Flipbook
 
+[![Android release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=android-v*&label=android)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=android-v&expanded=true)
+[![Website release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=website-v*&label=website)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true)
+[![JitPack](https://jitpack.io/v/mdakashhossain1/flip-book-plagin.svg)](https://jitpack.io/#mdakashhossain1/flip-book-plagin)
+
 A PDF flipbook viewer for Android apps and websites, with page-turn animation, zoom, a swipeable thumbnail strip, a page-number badge, and sound.
 
 - **Android**: a native Kotlin library, installed from JitPack. Works with Android Views and Jetpack Compose.
@@ -27,6 +31,7 @@ A PDF flipbook viewer for Android apps and websites, with page-turn animation, z
   - [Opening the website viewer from disk (file://)](#opening-the-website-viewer-from-disk-file)
   - [Network, CORS and permissions](#network-cors-and-permissions)
   - [Troubleshooting](#troubleshooting)
+  - [How releases work](#how-releases-work)
 - [Build from source](#build-from-source)
 
 ## Choose your version
@@ -41,10 +46,10 @@ A PDF flipbook viewer for Android apps and websites, with page-turn animation, z
 
 | Platform | Release notes | Install |
 | --- | --- | --- |
-| Android | [Android v0.2.1](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/android-v0.2.1) | [Gradle + JitPack](#android) |
-| Website | [Website v0.2.0](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/website-v0.2.0) | [CDN](#option-a-load-from-the-cdn-auto-updates) or [ZIP](https://github.com/mdakashhossain1/flip-book-plagin/releases/download/website-v0.2.0/scoreplus-flipbook-website-0.2.0.zip) |
+| Android | [![Android release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=android-v*&label=android)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=android-v&expanded=true) | [Gradle + JitPack](#android) |
+| Website | [![Website release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=website-v*&label=website)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true) | [CDN](#option-a-load-from-the-cdn-auto-updates) or the ZIP attached to each [website release](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true) |
 
-Releases use platform-specific tags: `android-vX.Y.Z` and `website-vX.Y.Z`. See [all releases](https://github.com/mdakashhossain1/flip-book-plagin/releases).
+The badges always show the newest release. Releases use platform-specific tags, `android-vX.Y.Z` and `website-vX.Y.Z`, and are created automatically; see [How releases work](#how-releases-work). To be notified of new versions, click **Watch → Custom → Releases** on the GitHub repository.
 
 ## Android
 
@@ -95,11 +100,11 @@ In `app/build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.github.mdakashhossain1:flip-book-plagin:android-v0.2.1")
+    implementation("com.github.mdakashhossain1:flip-book-plagin:android-vX.Y.Z")
 }
 ```
 
-To always get the newest release without editing this line, use `latest.release` instead of the version. See [Automatic updates](#automatic-updates) for what each option does.
+Replace `android-vX.Y.Z` with the tag shown in the Android badge at the top. To always get the newest release without editing this line, use `latest.release` instead. See [Automatic updates](#automatic-updates) for what each option does.
 
 ```kotlin
 implementation("com.github.mdakashhossain1:flip-book-plagin:latest.release")
@@ -259,7 +264,7 @@ jsDelivr serves the `website` branch straight from GitHub, so you don't host any
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>PDF flipbook</title>
 
-    <!-- @website follows the newest commit; use @website-v0.2.0 to pin a release -->
+    <!-- @website follows the newest commit; use @website-vX.Y.Z to pin a release -->
     <script>
       window.CDN_PATH = "https://cdn.jsdelivr.net/gh/mdakashhossain1/flip-book-plagin@website/assets";
     </script>
@@ -338,7 +343,7 @@ This exact page was tested served from a local web server: all viewer files load
 
 ### Option B: Self-host the ZIP
 
-1. Download [`scoreplus-flipbook-website-0.2.0.zip`](https://github.com/mdakashhossain1/flip-book-plagin/releases/download/website-v0.2.0/scoreplus-flipbook-website-0.2.0.zip) and extract it.
+1. Open the newest [website release](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=website-v&expanded=true), download `scoreplus-flipbook-website-X.Y.Z.zip` from its **Assets**, and extract it.
 2. Copy `index.html` and the whole `assets/` folder into a public folder of your site, such as `public/flipbook/`. Keep the folder structure.
 3. Put your PDF in `assets/books/`, and replace the last inline script in `index.html`:
 
@@ -378,12 +383,12 @@ In React JSX, write the style as `style={{ width: "100%", height: "80vh", border
 
 | Version string | You get | Changes by itself? | Best for |
 | --- | --- | --- | --- |
-| `android-v0.2.1` | That exact release | No | Production apps (recommended) |
+| `android-vX.Y.Z` | That exact release | No | Production apps (recommended) |
 | `latest.release` | The newest published release | Yes, at build time | Always staying current |
 | `android-v+` | The newest `android-v…` release | Yes, at build time | Same as above, limited to Android tags |
 | `android-SNAPSHOT` | The newest commit on the `android` branch, released or not | Yes, every commit | Testing unreleased fixes |
 
-All four were tested against JitPack. `latest.release` and `android-v+` resolved to `android-v0.2.1`, and `android-SNAPSHOT` resolved to the newest `android` branch build.
+All four were tested against JitPack: `latest.release` and `android-v+` resolved to the newest release, and `android-SNAPSHOT` to the newest `android` branch build.
 
 Things to know:
 
@@ -412,7 +417,7 @@ Things to know:
 
 | URL version | You get | Changes by itself? | Best for |
 | --- | --- | --- | --- |
-| `@website-v0.2.0` | That exact release | No | Production sites (recommended) |
+| `@website-vX.Y.Z` | That exact release | No | Production sites (recommended) |
 | `@website` | The newest commit on the `website` branch | Yes | Always staying current |
 | `@<commit-sha>` | One exact commit | No | Pinning an unreleased fix |
 
@@ -585,6 +590,17 @@ Keep `openFlipbook("assets/books/sample.pdf")` pointing at the `.pdf`; the viewe
 | `Missing ….pdf.js` in the console | The page was opened from disk. Create the `.js` copy ([file://](#opening-the-website-viewer-from-disk-file)) or serve the page over HTTP. |
 | No sound at first | Browsers and the library stay silent until the reader first touches, clicks or presses a key. |
 
+### How releases work
+
+Each branch releases itself with [release-please](https://github.com/googleapis/release-please) in GitHub Actions. Nobody edits version numbers by hand:
+
+1. Commits use the [Conventional Commits](https://www.conventionalcommits.org/) format. `fix: …` makes a patch release, `feat: …` a minor release, and `docs:`, `chore:` or `ci:` no release.
+2. Every push to `android` or `website` opens or updates a **release PR** on that branch. It bumps the branch's `version.txt` and adds the new section to its `CHANGELOG.md`.
+3. Merging the release PR creates the tag (`android-vX.Y.Z` or `website-vX.Y.Z`) and the GitHub Release. The Android workflow attaches the AAR and asks JitPack to build the tag; the website workflow attaches the ZIP.
+4. The badges in this README update automatically, and users who watch the repository's releases are notified.
+
+A **CI** workflow on each branch runs on every push and pull request: Android builds the library and the sample app and checks the JitPack publication; the website checks that the scripts parse and that `index.html` only references files that exist.
+
 ## Build from source
 
 Android:
@@ -594,7 +610,7 @@ git clone --branch android --single-branch https://github.com/mdakashhossain1/fl
 cd flipbook-android
 ```
 
-Open it in Android Studio (compileSdk 36; Gradle is configured for JDK 25). Build with `.\gradlew.bat :flipbook:assembleRelease` on Windows or `bash gradlew :flipbook:assembleRelease` on macOS/Linux. The AAR is written to `flipbook/build/outputs/aar/flipbook-release.aar`. To check the Maven publication locally, run `.\gradlew.bat :flipbook:publishReleasePublicationToMavenLocal "-Pversion=android-v0.2.1"`. JitPack runs the command in `jitpack.yml` for each requested tag ([JitPack Android guide](https://docs.jitpack.io/android/)).
+Open it in Android Studio (compileSdk 36; Gradle is configured for JDK 25). Build with `.\gradlew.bat :flipbook:assembleRelease` on Windows or `bash gradlew :flipbook:assembleRelease` on macOS/Linux. The AAR is written to `flipbook/build/outputs/aar/flipbook-release.aar`. To check the Maven publication locally, run `.\gradlew.bat :flipbook:publishReleasePublicationToMavenLocal "-Pversion=android-vX.Y.Z"`. JitPack runs the command in `jitpack.yml` for each requested tag ([JitPack Android guide](https://docs.jitpack.io/android/)).
 
 Website:
 
