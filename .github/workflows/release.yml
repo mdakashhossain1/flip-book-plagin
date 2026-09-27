@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    branches: [android]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          target-branch: android
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ needs.release-please.outputs.tag_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build the AAR
+        run: ./gradlew :flipbook:assembleRelease -Pversion="$TAG"
+      - name: Attach the AAR to the GitHub Release
+        run: |
+          cp flipbook/build/outputs/aar/flipbook-release.aar "scoreplus-flipbook-android-${TAG#android-v}.aar"
+          gh release upload "$TAG" "scoreplus-flipbook-android-${TAG#android-v}.aar" --clobber
+      - name: Ask JitPack to build the new tag
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf "https://jitpack.io/com/github/${GITHUB_REPOSITORY}/${TAG}/build.log" | grep -q "BUILD SUCCESSFUL"; then
+              echo "JitPack build ready"; exit 0
+            fi
+            sleep 30
+          done
+          echo "JitPack build not finished yet; check https://jitpack.io/#${GITHUB_REPOSITORY}/${TAG}"

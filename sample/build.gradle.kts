@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+val appVersion = providers.fileContents(rootProject.layout.projectDirectory.file("version.txt")).asText.get().trim()
+
 android {
     namespace = "com.scoreplus.flipbook.sample"
     compileSdk = 36
@@ -10,8 +12,8 @@ android {
         applicationId = "com.scoreplus.flipbook.sample"
         minSdk = 24
         targetSdk = 36
-        versionCode = 9
-        versionName = "0.2.2"
+        versionCode = appVersion.split(".").map(String::toInt).let { (major, minor, patch) -> major * 10000 + minor * 100 + patch }
+        versionName = appVersion
     }
 
     compileOptions {

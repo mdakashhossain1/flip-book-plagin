@@ -1,5 +1,9 @@
 # ScorePlus Flipbook for Android
 
+[![Latest Android release](https://img.shields.io/github/v/release/mdakashhossain1/flip-book-plagin?filter=android-v*&label=release)](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=android-v&expanded=true)
+[![JitPack](https://jitpack.io/v/mdakashhossain1/flip-book-plagin.svg)](https://jitpack.io/#mdakashhossain1/flip-book-plagin)
+[![CI](https://github.com/mdakashhossain1/flip-book-plagin/actions/workflows/ci.yml/badge.svg?branch=android)](https://github.com/mdakashhossain1/flip-book-plagin/actions/workflows/ci.yml?query=branch%3Aandroid)
+
 A native Kotlin port of the ScorePlus web flipbook (turn.js + pdf.js). It uses the same page-curl engine, layout, controls, icons, sounds and options as the web version, with no WebView and no third-party dependencies. PDF pages are rendered with Android's built-in `PdfRenderer`.
 
 ## Install with Gradle (JitPack)
@@ -25,13 +29,13 @@ Add the library in your app's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("com.github.mdakashhossain1:flip-book-plagin:android-v0.2.1")
+    implementation("com.github.mdakashhossain1:flip-book-plagin:android-vX.Y.Z")
 }
 ```
 
 Use `minSdk` 24 or higher and sync Gradle. Gradle downloads the library and its declared dependencies; no manual AAR copy is needed.
 
-The version is the Android Git tag. The older `android-v0.2.0` tag predates Maven publishing. See the [JitPack build](https://jitpack.io/#mdakashhossain1/flip-book-plagin/android-v0.2.1) and [release notes](https://github.com/mdakashhossain1/flip-book-plagin/releases/tag/android-v0.2.1).
+Replace `android-vX.Y.Z` with the tag shown in the release badge above, or use `latest.release` to always get the newest release. Use `android-v0.2.1` or later; `android-v0.2.0` predates Maven publishing. See the [JitPack builds](https://jitpack.io/#mdakashhossain1/flip-book-plagin) and the [Android release notes](https://github.com/mdakashhossain1/flip-book-plagin/releases?q=android-v&expanded=true).
 
 ## Quick start
 
@@ -103,7 +107,7 @@ gradlew :flipbook:assembleRelease     # flipbook/build/outputs/aar/flipbook-rele
 The `flipbook` module publishes its release AAR, POM, Gradle metadata, and Kotlin sources with Gradle's `maven-publish` plugin. Verify publication locally with:
 
 ```powershell
-.\gradlew.bat :flipbook:publishReleasePublicationToMavenLocal "-Pversion=android-v0.2.1"
+.\gradlew.bat :flipbook:publishReleasePublicationToMavenLocal "-Pversion=android-vX.Y.Z"
 ```
 
 On macOS/Linux use `bash gradlew` in place of `.\gradlew.bat`. JitPack runs the command configured in `jitpack.yml` for the requested Git tag. See [JitPack's Android publishing guide](https://docs.jitpack.io/android/).
@@ -137,3 +141,20 @@ Pages are rendered at screen resolution, and only the pages around the current o
 ## History
 
 See [CHANGELOG.md](CHANGELOG.md).
+
+## Releasing
+
+Releases are automated with [release-please](https://github.com/googleapis/release-please). Nobody edits version numbers by hand.
+
+1. Write commit messages in the [Conventional Commits](https://www.conventionalcommits.org/) format:
+   - `fix: …` → patch release (0.2.1 → 0.2.2)
+   - `feat: …` → minor release (0.2.x → 0.3.0)
+   - `feat!: …` or a `BREAKING CHANGE:` footer → while below 1.0, a minor release; from 1.0, a major release
+   - `docs:`, `chore:`, `ci:`, `refactor:`, `test:` → no release
+2. On every push to `android`, the **Release** workflow opens or updates a release PR. It bumps `version.txt` and adds the new section to `CHANGELOG.md`.
+3. Merge the release PR. The workflow then creates the `android-vX.Y.Z` tag and GitHub Release, attaches the AAR, and asks JitPack to build the tag.
+
+`version.txt` is the single source of the version. The library's default Maven version (`android-v<version>`) and the sample app's `versionName` and `versionCode` are read from it. JitPack overrides the Maven version with the tag name.
+
+The **CI** workflow builds the library and the sample, and checks the JitPack publication, on every push and pull request to `android`.
+
